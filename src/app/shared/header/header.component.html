@@ -1,0 +1,52 @@
+<header class="app-header" role="banner">
+  <div class="app-header__inner">
+
+    <!-- Brand -->
+    <a routerLink="/" class="app-header__brand" aria-label="Piktiv home">
+      <span class="app-header__brand-icon" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="8" fill="#2563eb"/>
+          <path d="M7 19.5L11.5 13.5L15 17.5L18.5 12.5L21 19.5H7Z" fill="white" opacity="0.9"/>
+          <circle cx="18" cy="10" r="2.5" fill="white"/>
+        </svg>
+      </span>
+      <span class="app-header__brand-name">Piktiv</span>
+    </a>
+
+    <!-- Nav: unified tab bar with sliding indicator -->
+    <nav class="app-header__nav" aria-label="Main navigation">
+      <div
+        class="app-header__indicator"
+        [class.app-header__indicator--favorites]="isFavoritesViewActive()"
+        aria-hidden="true"
+      ></div>
+      <a
+        mat-button
+        class="app-header__nav-link"
+        routerLink="/"
+        [class.app-header__nav-link--active]="isPhotosViewActive()"
+        [attr.aria-current]="isPhotosViewActive() ? 'page' : null"
+      >
+        <mat-icon class="app-header__nav-icon">photo_library</mat-icon>
+        <span>Photos</span>
+      </a>
+      <a
+        mat-button
+        class="app-header__nav-link"
+        routerLink="/favorites"
+        [class.app-header__nav-link--active]="isFavoritesViewActive()"
+        [attr.aria-current]="isFavoritesViewActive() ? 'page' : null"
+        [attr.aria-label]="favoritesService.count() > 0 ? 'Favorites, ' + favoritesService.count() + ' saved' : null"
+      >
+        <mat-icon class="app-header__nav-icon">favorite</mat-icon>
+        <span>Favorites</span>
+        @if (favoritesService.count() > 0) {
+          <span class="app-header__badge" aria-hidden="true">
+            {{ favoritesService.count() }}
+          </span>
+        }
+      </a>
+    </nav>
+
+  </div>
+</header>

@@ -1,0 +1,70 @@
+<article
+  class="photo-card"
+  (click)="onCardClick()"
+  [attr.aria-label]="'Photo by ' + photo().author + (isFavorite() ? ', saved to favorites' : ', tap to add to favorites')"
+  tabindex="0"
+  (keyup.enter)="onCardClick()"
+  (keydown.space)="onCardClick(); $event.preventDefault()"
+  role="button"
+>
+  <div
+    class="photo-card__media"
+    [style.aspect-ratio]="photo().imageWidth && photo().imageHeight ? photo().imageWidth + ' / ' + photo().imageHeight : '2 / 3'"
+  >
+    <!-- Skeleton placeholder -->
+    <div
+      class="photo-card__skeleton"
+      [class.photo-card__skeleton--hidden]="imageLoaded()"
+      aria-hidden="true"
+    ></div>
+
+    @if (priority()) {
+      <img
+        appImageLoad
+        [resetTrigger]="photo().id"
+        (loaded)="onImageLoad()"
+        [ngSrc]="photo().imageUrl"
+        [width]="photo().imageWidth"
+        [height]="photo().imageHeight"
+        [alt]="'Photo by ' + photo().author"
+        class="photo-card__image"
+        [class.photo-card__image--loaded]="imageLoaded()"
+        priority
+      />
+    } @else {
+      <img
+        appImageLoad
+        [resetTrigger]="photo().id"
+        (loaded)="onImageLoad()"
+        [ngSrc]="photo().imageUrl"
+        [width]="photo().imageWidth"
+        [height]="photo().imageHeight"
+        [alt]="'Photo by ' + photo().author"
+        class="photo-card__image"
+        [class.photo-card__image--loaded]="imageLoaded()"
+      />
+    }
+
+    <!-- Gradient overlay -->
+    <div class="photo-card__overlay" aria-hidden="true"></div>
+
+    <!-- Author on overlay -->
+    <div class="photo-card__meta" aria-hidden="true">
+      <span class="photo-card__author-chip">
+        <mat-icon class="photo-card__author-icon">person</mat-icon>
+        <span class="photo-card__author-name">{{ photo().author }}</span>
+      </span>
+    </div>
+
+    <!-- Favorite button -->
+    <button
+      type="button"
+      class="photo-card__fav-btn"
+      [class.photo-card__fav-btn--active]="isFavorite()"
+      [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'"
+      (click)="onFavoriteClick($event)"
+    >
+      <mat-icon class="photo-card__fav-icon">{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
+    </button>
+  </div>
+</article>

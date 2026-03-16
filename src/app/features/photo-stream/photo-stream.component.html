@@ -1,0 +1,58 @@
+<main class="photo-stream">
+  <!-- Page hero -->
+  <section class="photo-stream__hero" aria-label="Page header">
+    <h1 class="photo-stream__hero-title">Discover Photos</h1>
+    <p class="photo-stream__hero-sub">Select a photo to view it, or the heart to save to favorites</p>
+  </section>
+
+  <!-- Grid: uniform CSS grid (spec: infinite scrollable list) -->
+  <section class="photo-stream__grid" aria-label="Photo grid">
+    @for (photo of listState.photos(); track photo.id; let index = $index) {
+      <div class="photo-stream__grid-item">
+        <app-photo-card
+          [photo]="photo"
+          [isFavorite]="favoritesService.favoriteIds().has(photo.id)"
+          [priority]="index < 4"
+          (favoriteToggled)="onFavoriteToggled($event)"
+          (cardClicked)="onCardClicked($event)"
+        />
+      </div>
+    }
+    @if (listState.photos().length === 0 && listState.isLoading()) {
+      @for (skeleton of skeletonPlaceholders; track $index) {
+        <div class="photo-stream__grid-item photo-stream__skeleton" aria-hidden="true">
+          <div class="photo-stream__skeleton-inner"></div>
+        </div>
+      }
+    }
+  </section>
+
+  <!-- Loading -->
+  @if (listState.isLoading()) {
+    <div class="photo-stream__loader" role="status" aria-live="polite" aria-label="Loading more photos">
+      <mat-spinner [diameter]="44"></mat-spinner>
+      <span class="photo-stream__loader-text">Loading more photos…</span>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (listState.error()) {
+    <div class="photo-stream__error" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ listState.error() }}</span>
+      <button type="button" class="photo-stream__retry-btn" (click)="retry()">
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Sentinel -->
+  @if (listState.hasMore()) {
+    <div
+      appInfiniteScroll
+      (scrolledToEnd)="loadMore()"
+      class="photo-stream__sentinel"
+      aria-hidden="true"
+    ></div>
+  }
+</main>

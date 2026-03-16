@@ -4,8 +4,37 @@
   <meta charset="utf-8">
   <title>Piktiv</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://picsum.photos https://*.picsum.photos blob:; connect-src 'self' https://picsum.photos https://*.picsum.photos https://fonts.googleapis.com https://fonts.gstatic.com;"
+  >
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- Early connection hints: API origin + image CDN (crossorigin for CORS image requests) -->
+  <link rel="preconnect" href="https://picsum.photos">
+  <link rel="preconnect" href="https://fastly.picsum.photos" crossorigin>
+  <link rel="dns-prefetch" href="https://picsum.photos">
+  <link rel="dns-prefetch" href="https://fastly.picsum.photos">
+  <!-- Material Icons (for MatIcon) -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Fonts: local woff2, preload for faster LCP -->
+  <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    :root{--color-bg:#f7f6f3;--color-ink-1:#16151a;--color-surface:#fff;--color-surface-2:#f0efe9;--color-border:rgba(0,0,0,.08);--radius-lg:20px;--shadow-card:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.08);--transition-base:220ms cubic-bezier(.4,0,.2,1);--layout-header-height:64px}
+    body{background:var(--color-bg);color:var(--color-ink-1);font-family:'DM Sans',system-ui,sans-serif;margin:0;min-height:100vh;-webkit-font-smoothing:antialiased}
+    app-root{display:flex;flex-direction:column;min-height:100vh}
+    .app-content{flex:1;display:flex;flex-direction:column;padding-top:calc(var(--layout-header-height) + env(safe-area-inset-top,0))}
+    .app-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--color-border);padding-top:env(safe-area-inset-top,0)}
+    .app-header__inner{max-width:1280px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+    .photo-stream{max-width:1280px;margin:0 auto;padding:0 24px 80px}
+    .photo-stream__hero{padding:48px 0 36px}
+    .photo-stream__hero-title{font-size:clamp(2rem,4vw,2.75rem);font-weight:400;letter-spacing:-.03em;color:var(--color-ink-1);line-height:1.1;margin:0 0 8px}
+    .photo-stream__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .photo-card{display:block;border-radius:var(--radius-lg);overflow:hidden;background:var(--color-surface);box-shadow:var(--shadow-card);cursor:pointer}
+    .photo-card__media{position:relative;overflow:hidden;aspect-ratio:4/3;background:var(--color-surface-2)}
+    .photo-card__image{position:relative;display:block;width:100%;height:100%;object-fit:cover}
+    @media(max-width:600px){.photo-stream{padding:0 16px 64px}.photo-stream__hero{padding:32px 0 24px}.photo-stream__grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+  </style>
 </head>
 <body>
   <app-root></app-root>

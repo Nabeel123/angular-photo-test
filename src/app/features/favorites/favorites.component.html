@@ -1,0 +1,45 @@
+<main class="favorites">
+  <!-- Page hero -->
+  <section class="favorites__hero" aria-label="Page header">
+    <h1 class="favorites__hero-title">My Favorites</h1>
+    <p class="favorites__hero-sub">
+      @if (!isEmpty()) {
+        You have {{ favorites().length }} {{ favorites().length === 1 ? 'photo' : 'photos' }} saved.
+      } @else {
+        Save photos you love to find them here.
+      }
+    </p>
+  </section>
+
+  <!-- Empty state -->
+  @if (isEmpty()) {
+    <div class="favorites__empty" role="status">
+      <div class="favorites__empty-icon" aria-hidden="true">
+        <mat-icon class="favorites__empty-icon-svg">favorite_border</mat-icon>
+      </div>
+      <h2 class="favorites__empty-title">No favorites yet</h2>
+      <p class="favorites__empty-body">
+        Browse photos and tap the heart to save your favorites here.
+      </p>
+      <a class="favorites__empty-cta" routerLink="/">
+        <mat-icon>photo_library</mat-icon>
+        Browse Photos
+      </a>
+    </div>
+
+  } @else {
+    <section class="favorites__grid" aria-label="Favorite photos">
+      @for (photo of favorites(); track photo.id; let index = $index) {
+        <div class="favorites__grid-item">
+          <app-photo-card
+            [photo]="photo"
+            [isFavorite]="true"
+            [priority]="index < 4"
+            (cardClicked)="onCardClicked($event)"
+            (favoriteToggled)="onFavoriteToggled($event)"
+          />
+        </div>
+      }
+    </section>
+  }
+</main>

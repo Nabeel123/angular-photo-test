@@ -1,0 +1,99 @@
+@use '../../../styles/mixins' as m;
+
+.photo-stream {
+  @include m.page-layout;
+
+  @include m.page-hero;
+  @include m.photo-grid;
+
+  // ── Loader ─────────────────────────────────────────
+  &__loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 32px 0 8px;
+  }
+
+  &__loader-text {
+    font-size: 0.8125rem;
+    color: var(--color-ink-3);
+    letter-spacing: 0.02em;
+  }
+
+  // ── Error ──────────────────────────────────────────
+  &__error {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    color: var(--color-danger);
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    mat-icon {
+      flex-shrink: 0;
+    }
+  }
+
+  &__retry-btn {
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-danger);
+    background: transparent;
+    color: var(--color-danger);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition-base), color var(--transition-base);
+
+    @media (hover: hover) {
+      &:hover {
+        background: var(--color-danger);
+        color: #fff;
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  // ── Sentinel ───────────────────────────────────────
+  &__sentinel {
+    height: 1px;
+    margin-top: 8px;
+  }
+
+  // ── Skeleton placeholders ────────────────────────────
+  &__skeleton {
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+    aspect-ratio: 2 / 3;
+  }
+
+  &__skeleton-inner {
+    width: 100%;
+    height: 100%;
+    @include m.skeleton-shimmer;
+  }
+}
+
+@media (max-width: 519px) {
+  .photo-stream {
+    padding: 0 12px 64px;
+
+    &__hero {
+      padding: 32px 0 24px;
+    }
+
+    &__grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+  }
+}

@@ -1,0 +1,156 @@
+@use '../../../styles/mixins' as m;
+
+// ─── Photo Detail: full-screen image per spec ─────────────────────────────────
+.photo-detail {
+  min-height: var(--layout-content-min-height);
+  display: flex;
+  flex-direction: column;
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: var(--layout-content-min-height);
+  }
+
+  &__layout {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  &__figure {
+    margin: 0;
+    position: relative;
+    background: var(--color-ink-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex: 1;
+    min-height: 50vh;
+  }
+
+  &__figcaption {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  &__skeleton {
+    position: absolute;
+    inset: 0;
+    @include m.skeleton-shimmer(rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+    transition: opacity 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    pointer-events: none;
+
+    &--hidden {
+      opacity: 0;
+      animation: none;
+    }
+  }
+
+  &__image {
+    position: relative;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    opacity: 0;
+    transform: translateZ(0) scale(0.99);
+    transition:
+      opacity 450ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      transform 450ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    &--loaded {
+      opacity: 1;
+      transform: translateZ(0) scale(1);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 20px 24px;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+  }
+
+  &__back-btn,
+  &__fav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__fav-btn {
+    &:not(.photo-detail__fav-btn--active) {
+      background: var(--color-surface) !important;
+      color: var(--color-ink-1) !important;
+      border: 1px solid var(--color-border);
+    }
+  }
+
+  &__fav-btn--active {
+    background: var(--color-fav) !important;
+    color: var(--color-surface) !important;
+    border-color: var(--color-fav);
+
+    @media (hover: hover) {
+      &:hover {
+        background: var(--color-danger) !important;
+      }
+    }
+  }
+
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex: 1;
+    min-height: var(--layout-content-min-height);
+    text-align: center;
+    padding: 40px 24px;
+  }
+
+  &__error-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: var(--color-ink-3);
+  }
+
+  &__error-title {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--color-ink-1);
+  }
+
+  &__error-body {
+    color: var(--color-ink-2);
+    font-size: 0.9375rem;
+    max-width: 320px;
+    line-height: 1.6;
+  }
+}
+

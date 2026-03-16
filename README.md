@@ -1,6 +1,32 @@
 # Piktiv
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.2.
+A photo library app built with Angular 21. Browse random photos, add them to favorites, and view details. Favorites persist in localStorage.
+
+## Architecture
+
+The app follows Angular best practices for scalable architecture. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full guide (aligned with [this article](https://medium.com/@iamtapan/a-guide-to-effective-angular-architecture-best-practices-b08f7104b2a5)).
+
+Quick overview:
+
+```
+src/app/
+├── core/           # Shared business logic (services, models, storage)
+├── features/       # Route-level feature components
+│   ├── photo-stream/    # Infinite scroll photo grid (/)
+│   ├── favorites/      # Saved photos list (/favorites)
+│   └── photo-detail/    # Single photo view (/photos/:id)
+└── shared/         # Reusable UI and directives
+    ├── directives/     # e.g. infinite-scroll
+    └── ui/             # Molecules (photo-card) → Organisms (header)
+```
+
+- **core**: `PhotoApiService` (Picsum API), `FavoritesService` (signal-based state), `LocalStorageService`
+- **features**: One component per route; lazy-loaded
+- **shared**: Stateless, reusable pieces used across features
+
+## Environment configuration
+
+Copy `.env.production.example` to `.env.production` and adjust. Run `yarn generate-env` to regenerate `api.config.ts` from `.env.production` (runs automatically before `start` and `build`).
 
 ## Development server
 
@@ -46,13 +72,49 @@ ng test
 
 ## Running end-to-end tests
 
-For end-to-end (e2e) testing, run:
+E2E tests use [Playwright](https://playwright.dev/). First install browsers:
+
+```bash
+npx playwright install
+```
+
+Then run tests:
 
 ```bash
 ng e2e
+# or
+npx playwright test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Start the dev server (`ng serve`) before running E2E, or use `reuseExistingServer: true` in `playwright.config.ts` to use an already running server.
+
+## Docker
+
+Build and run with Docker:
+
+```bash
+docker build -t piktiv .
+docker run -p 4000:4000 piktiv
+```
+
+Or with Docker Compose:
+
+```bash
+docker-compose up --build
+```
+
+The app will be available at `http://localhost:4000`.
+
+## Performance & Lighthouse Treemap
+
+To analyze bundle size and unused JavaScript with the [Lighthouse Treemap](https://googlechrome.github.io/lighthouse/treemap/?gzip=1#):
+
+1. Run `yarn serve:prod` (builds and serves static files from `dist/piktiv/browser` on port 4200)
+2. Open Chrome DevTools → Lighthouse
+3. Enable **Capture treemap**, run the audit
+4. Export the result as JSON and paste it into the treemap tool
+
+See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for the full workflow and optimizations.
 
 ## Additional Resources
 

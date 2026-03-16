@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output (we build fresh in Docker)
+dist
+
+# Test artifacts
+coverage
+test-results
+playwright-report
+.angular/cache
+
+# IDE and misc
+.idea
+.vscode
+*.log
+.DS_Store
+
+# Git
+.git
+.gitignore
+
+# Documentation (optional - remove if you want docs in image)
+*.md
+!README.md

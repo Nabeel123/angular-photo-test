@@ -1,0 +1,64 @@
+/// Skeleton shimmer animation (respects prefers-reduced-motion)
+@mixin skeleton-shimmer($from: var(--color-surface-2), $mid: var(--color-surface), $to: var(--color-surface-2)) {
+  background: linear-gradient(90deg, #{$from} 0%, #{$mid} 50%, #{$to} 100%);
+  background-size: 200% 100%;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: skeleton-shimmer-anim 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes skeleton-shimmer-anim {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/// Page layout: max-width container, padding, min-height
+@mixin page-layout($max-width: 1400px, $padding-x: 16px, $padding-bottom: 80px) {
+  min-height: var(--layout-content-min-height);
+  display: flex;
+  flex-direction: column;
+  max-width: #{$max-width};
+  margin: 0 auto;
+  padding: 0 #{$padding-x} #{$padding-bottom};
+}
+
+/// Hero section (title + subtitle). Use inside a parent like .photo-stream { @include page-hero }
+@mixin page-hero($title-size: clamp(2rem, 4vw, 2.75rem)) {
+  &__hero {
+    padding: 48px 0 36px;
+  }
+
+  &__hero-title {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: #{$title-size};
+    letter-spacing: -0.03em;
+    color: var(--color-ink-1);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  &__hero-sub {
+    font-size: 0.9375rem;
+    color: var(--color-ink-2);
+  }
+}
+
+
+/// Photo grid (2:3 cards). Use inside parent: .photo-stream { @include photo-grid }
+@mixin photo-grid($min-col: 200px, $gap: 8px) {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(#{$min-col}, 1fr));
+    gap: #{$gap};
+  }
+
+  &__grid-item {
+    min-width: 0;
+  }
+}
