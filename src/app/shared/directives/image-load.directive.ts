@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Directive,
   effect,
   ElementRef,
@@ -16,7 +15,7 @@ import {
   selector: 'img[appImageLoad]',
   host: { '(load)': 'onLoad()' },
 })
-export class ImageLoadDirective implements AfterViewInit {
+export class ImageLoadDirective {
   private readonly el = inject(ElementRef<HTMLImageElement>);
 
   /** When this changes (e.g. photo id), re-check if the image is already complete (cached) */
@@ -28,10 +27,6 @@ export class ImageLoadDirective implements AfterViewInit {
     this.resetTrigger();
     queueMicrotask(() => this.checkAndEmit());
   });
-
-  ngAfterViewInit(): void {
-    queueMicrotask(() => this.checkAndEmit());
-  }
 
   private checkAndEmit(): void {
     const img = this.el.nativeElement;

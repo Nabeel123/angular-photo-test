@@ -1,34 +1,18 @@
-import { computed, inject, Injectable, Signal, signal } from '@angular/core';
-import { LegacyFavoritesState, Photo, StoredFavoritesData, StoredPhoto } from '../models/photo.model';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { Photo } from '../models/photo.model';
 import { API_CONFIG_TOKEN } from '../config/api.config';
 
 /** Validates that a value from JSON has the required Photo fields. */
-function isStoredPhoto(candidate: StoredPhoto | null | undefined): candidate is StoredPhoto {
+function isPhoto(candidate: unknown): candidate is Photo {
   return (
     candidate != null &&
     typeof candidate === 'object' &&
-    typeof candidate.id === 'string' &&
-    typeof candidate.author === 'string' &&
-    typeof candidate.imageUrl === 'string'
+    typeof (candidate as Photo).id === 'string' &&
+    typeof (candidate as Photo).author === 'string' &&
+    typeof (candidate as Photo).imageUrl === 'string' &&
+    typeof (candidate as Photo).imageWidth === 'number' &&
+    typeof (candidate as Photo).imageHeight === 'number'
   );
-}
-
-/** Ensures imageWidth/imageHeight exist, parsing from URL if missing (legacy data). */
-function normalizePhoto(
-  storedPhoto: StoredPhoto,
-  defaults: { imageWidth: number; imageHeight: number }
-): Photo {
-  if (storedPhoto.imageWidth != null && storedPhoto.imageHeight != null) {
-    return storedPhoto as Photo;
-  }
-  const dimensionMatch = storedPhoto.imageUrl.match(/\/\d+\/(\d+)\/(\d+)(?:\?|$)/);
-  const imageWidth = dimensionMatch
-    ? parseInt(dimensionMatch[1], 10)
-    : defaults.imageWidth;
-  const imageHeight = dimensionMatch
-    ? parseInt(dimensionMatch[2], 10)
-    : defaults.imageHeight;
-  return { ...storedPhoto, imageWidth, imageHeight };
 }
 
 /** Manages favorite photos with localStorage persistence. */
@@ -68,23 +52,24 @@ export class FavoritesService {
     }
   }
 
-  /** Load from localStorage. Supports current format (Photo[]) and legacy { ids, entities }. */
   private load(): Photo[] {
     try {
       const raw = localStorage.getItem(this.config.favoritesStorageKey);
       if (!raw) return [];
-      const parsed: StoredFavoritesData = JSON.parse(raw);
-      const defaults = this.config.picsum;
+      const parsed: unknown = JSON.parse(raw);
       if (Array.isArray(parsed)) {
-        return parsed.filter(isStoredPhoto).map((p) => normalizePhoto(p, defaults));
+        return parsed.filter(isPhoto);
       }
-      // Migrate from old { ids, entities } format
-      if (parsed && 'ids' in parsed && 'entities' in parsed) {
-        const legacyState = parsed as LegacyFavoritesState;
-        return (legacyState.ids || [])
-          .map((photoId) => legacyState.entities?.[photoId])
-          .filter(isStoredPhoto)
-          .map((p) => normalizePhoto(p, defaults));
+      // Legacy { ids: string[], entities: Record<string, unknown> } format
+      if (
+        parsed != null &&
+        typeof parsed === 'object' &&
+        'ids' in parsed &&
+        'entities' in parsed &&
+        Array.isArray((parsed as { ids: unknown }).ids)
+      ) {
+        const { ids, entities } = parsed as { ids: string[]; entities: Record<string, unknown> };
+        return ids.map((id) => entities[id]).filter(isPhoto);
       }
       return [];
     } catch {

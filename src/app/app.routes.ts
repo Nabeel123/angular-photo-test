@@ -1,10 +1,14 @@
 import { Routes } from '@angular/router';
-import { photosResolver } from './features/photo-stream/photos.resolver';
 
 export const routes: Routes = [
   {
     path: '',
-    resolve: { photos: photosResolver },
+    resolve: {
+      photos: () =>
+        import('./features/photo-stream/photos.resolver').then(
+          (m) => m.photosResolver
+        ),
+    },
     loadComponent: () =>
       import('./features/photo-stream/photo-stream.component').then(
         (m) => m.PhotoStreamComponent

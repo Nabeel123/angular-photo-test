@@ -50,17 +50,16 @@ export class PhotoDetailComponent {
     return p ? this.favoritesService.favoriteIds().has(p.id) : false;
   });
 
-  constructor() {
-    effect(() => {
-      if (this.id() === null) {
-        this.photoNav.navigateToStream();
-      }
-    });
-    effect(() => {
-      this.photo();
-      this._imageLoaded.set(false);
-    });
-  }
+  private readonly _navigateEffect = effect(() => {
+    if (this.id() === null) {
+      this.photoNav.navigateToStream();
+    }
+  });
+
+  private readonly _resetImageEffect = effect(() => {
+    this.photo();
+    this._imageLoaded.set(false);
+  });
 
   toggleFavorite(): void {
     const p = this.photo();

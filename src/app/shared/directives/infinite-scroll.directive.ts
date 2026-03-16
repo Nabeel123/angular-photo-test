@@ -1,38 +1,42 @@
 import {
+  afterNextRender,
   Directive,
+  DestroyRef,
   ElementRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
   output,
+  PLATFORM_ID,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Directive({
   selector: '[appInfiniteScroll]',
 })
-export class InfiniteScrollDirective implements OnInit, OnDestroy {
+export class InfiniteScrollDirective {
   readonly threshold = input<number>(0.1);
 
   readonly scrolledToEnd = output<void>();
 
   private readonly el = inject(ElementRef<HTMLElement>);
-  private observer: IntersectionObserver | null = null;
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
-  ngOnInit(): void {
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          this.scrolledToEnd.emit();
-        }
-      },
-      { threshold: this.threshold() }
-    );
+  constructor() {
+    if (!isPlatformBrowser(this.platformId)) return;
 
-    this.observer.observe(this.el.nativeElement);
-  }
+    afterNextRender(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0]?.isIntersecting) {
+            this.scrolledToEnd.emit();
+          }
+        },
+        { threshold: this.threshold() }
+      );
 
-  ngOnDestroy(): void {
-    this.observer?.disconnect();
+      observer.observe(this.el.nativeElement);
+      this.destroyRef.onDestroy(() => observer.disconnect());
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
 import {
   FavoritesService,
   Photo,
@@ -26,7 +26,7 @@ import {
   styleUrl: './photo-stream.component.scss',
   providers: [PhotoListStateService],
 })
-export class PhotoStreamComponent implements OnInit {
+export class PhotoStreamComponent {
   readonly listState = inject(PhotoListStateService);
   readonly favoritesService = inject(FavoritesService);
   readonly photoNav = inject(PhotoNavigationService);
@@ -36,9 +36,7 @@ export class PhotoStreamComponent implements OnInit {
 
   readonly skeletonPlaceholders = [1, 2, 3, 4] as const;
 
-  ngOnInit(): void {
-    this.listState.setPreloaded(this.photos() ?? []);
-  }
+  private readonly _ = effect(() => this.listState.setPreloaded(this.photos() ?? []));
 
   retry(): void {
     this.listState.retry();
