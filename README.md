@@ -4,7 +4,7 @@ A photo library app built with Angular 21. Browse random photos, add them to fav
 
 ## Architecture
 
-The app follows Angular best practices for scalable architecture. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full guide (aligned with [this article](https://medium.com/@iamtapan/a-guide-to-effective-angular-architecture-best-practices-b08f7104b2a5)).
+The app follows Angular best practices for scalable architecture (aligned with [this article](https://medium.com/@iamtapan/a-guide-to-effective-angular-architecture-best-practices-b08f7104b2a5)):
 
 Quick overview:
 
@@ -113,8 +113,6 @@ To analyze bundle size and unused JavaScript with the [Lighthouse Treemap](https
 2. Open Chrome DevTools → Lighthouse
 3. Enable **Capture treemap**, run the audit
 4. Export the result as JSON and paste it into the treemap tool
-
-See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for the full workflow and optimizations.
 
 ## Additional Resources
 
