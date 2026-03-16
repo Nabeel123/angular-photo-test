@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Photo, PicsumPhoto } from '../models/photo.model';
 import { API_CONFIG_TOKEN } from '../config/api.config';
 
@@ -21,7 +21,11 @@ export class PhotoApiService {
         params: { page: page.toString(), limit: limit.toString() },
       })
       .pipe(
-        map((rawList) => rawList.map((rawPhoto) => this.mapToPhoto(rawPhoto, false)))
+        map((rawList) => rawList.map((rawPhoto) => this.mapToPhoto(rawPhoto, false))),
+        catchError((err) => {
+          console.error('getPhotos failed', { page, limit, error: err });
+          throw err;
+        })
       );
   }
 
@@ -30,7 +34,11 @@ export class PhotoApiService {
     return this.http
       .get<PicsumPhoto>(`${baseUrl}/id/${photoId}/info`)
       .pipe(
-        map((rawPhoto) => this.mapToPhoto(rawPhoto, useDetailSize))
+        map((rawPhoto) => this.mapToPhoto(rawPhoto, useDetailSize)),
+        catchError((err) => {
+          console.error('getPhotoById failed', { photoId, error: err });
+          throw err;
+        })
       );
   }
 

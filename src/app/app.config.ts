@@ -2,8 +2,6 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { IMAGE_LOADER } from '@angular/common';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
 import { routes } from './app.routes';
 import { API_CONFIG, API_CONFIG_TOKEN } from './core/config/api.config';
 
@@ -12,7 +10,6 @@ const externalImageLoader = (config: { src: string }) => config.src;
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAnimationsAsync(),
     { provide: IMAGE_LOADER, useValue: externalImageLoader },
     { provide: API_CONFIG_TOKEN, useValue: API_CONFIG },
     provideBrowserGlobalErrorListeners(),

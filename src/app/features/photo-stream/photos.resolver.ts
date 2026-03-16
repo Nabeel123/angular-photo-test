@@ -8,5 +8,10 @@ export const photosResolver: ResolveFn<Photo[] | null> = () => {
   const config = inject(API_CONFIG_TOKEN);
   return inject(PhotoApiService)
     .getPhotos(1, config.picsum.initialPageLimit)
-    .pipe(catchError(() => of(null)));
+    .pipe(
+      catchError((err) => {
+        console.error('Photos resolver failed', err);
+        return of(null);
+      })
+    );
 };

@@ -1,5 +1,6 @@
 export interface PicsumPhoto {
-  id: string;
+  /** Picsum API returns numeric id; we normalize to string in mapToPhoto */
+  id: string | number;
   author: string;
 }
 

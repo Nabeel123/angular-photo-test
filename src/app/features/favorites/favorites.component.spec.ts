@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, Router } from '@angular/router';
 import { PLATFORM_ID, signal } from '@angular/core';
 import { FavoritesComponent } from './favorites.component';
@@ -26,7 +25,6 @@ describe('FavoritesComponent', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        provideAnimationsAsync(),
         provideRouter([]),
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: FavoritesService, useValue: favoritesSpy },

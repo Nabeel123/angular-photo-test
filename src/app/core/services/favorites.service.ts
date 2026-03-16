@@ -2,16 +2,32 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Photo } from '../models/photo.model';
 import { API_CONFIG_TOKEN } from '../config/api.config';
 
-/** Validates that a value from JSON has the required Photo fields. */
+const ALLOWED_IMAGE_ORIGINS = [
+  'https://picsum.photos',
+  'https://fastly.picsum.photos',
+] as const;
+
+function isAllowedImageUrl(url: string): boolean {
+  try {
+    const u = new URL(url);
+    return ALLOWED_IMAGE_ORIGINS.some((origin) => u.origin === origin);
+  } catch {
+    return false;
+  }
+}
+
+/** Validates that a value from JSON has the required Photo fields and allowed image URL. */
 function isPhoto(candidate: unknown): candidate is Photo {
+  const c = candidate as Photo;
   return (
     candidate != null &&
     typeof candidate === 'object' &&
-    typeof (candidate as Photo).id === 'string' &&
-    typeof (candidate as Photo).author === 'string' &&
-    typeof (candidate as Photo).imageUrl === 'string' &&
-    typeof (candidate as Photo).imageWidth === 'number' &&
-    typeof (candidate as Photo).imageHeight === 'number'
+    typeof c.id === 'string' &&
+    typeof c.author === 'string' &&
+    typeof c.imageUrl === 'string' &&
+    isAllowedImageUrl(c.imageUrl) &&
+    typeof c.imageWidth === 'number' &&
+    typeof c.imageHeight === 'number'
   );
 }
 
@@ -81,7 +97,7 @@ export class FavoritesService {
     try {
       localStorage.setItem(this.config.favoritesStorageKey, JSON.stringify(photos));
     } catch {
-      // Quota exceeded or storage unavailable — fail silently
+      console.log('Failed to save favorites to localStorage');
     }
   }
 }

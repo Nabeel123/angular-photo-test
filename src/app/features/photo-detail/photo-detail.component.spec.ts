@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
@@ -29,7 +28,6 @@ describe('PhotoDetailComponent', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        provideAnimationsAsync(),
         provideRouter([]),
         { provide: PhotoApiService, useValue: photoApiSpy },
         { provide: FavoritesService, useValue: favoritesSpy },

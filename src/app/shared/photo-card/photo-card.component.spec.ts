@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { PhotoCardComponent } from './photo-card.component';
 import { Photo } from '@app/core';
@@ -10,7 +9,7 @@ const mockPhoto = createMockPhoto({ author: 'Test Author' });
 describe('PhotoCardComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideAnimationsAsync(), provideRouter([])],
+      providers: [provideRouter([])],
     });
   });
 

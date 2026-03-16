@@ -32,8 +32,14 @@ export class PhotoDetailComponent {
     { initialValue: this.route.snapshot.paramMap.get('id') }
   );
 
+  /** Valid photo id for Picsum (numeric). Returns undefined for empty/invalid ids. */
+  private readonly validPhotoId = computed(() => {
+    const id = this.id();
+    return id?.trim() && /^\d+$/.test(id) ? id : undefined;
+  });
+
   private readonly photoResource = rxResource<Photo, string | undefined>({
-    params: () => this.id() ?? undefined,
+    params: () => this.validPhotoId(),
     stream: ({ params: id }) => this.photoApiService.getPhotoById(id, true),
   });
 
@@ -51,7 +57,8 @@ export class PhotoDetailComponent {
   });
 
   private readonly _navigateEffect = effect(() => {
-    if (this.id() === null) {
+    const id = this.id();
+    if (id === null || (typeof id === 'string' && !id.trim())) {
       this.photoNav.navigateToStream();
     }
   });

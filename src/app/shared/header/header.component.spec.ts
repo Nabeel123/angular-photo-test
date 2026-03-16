@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, Router } from '@angular/router';
 import { signal } from '@angular/core';
 import { HeaderComponent } from './header.component';
@@ -15,7 +14,6 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideAnimationsAsync(),
         provideRouter([]),
         { provide: FavoritesService, useValue: mockFavoritesService },
       ],
@@ -49,7 +47,6 @@ describe('HeaderComponent', () => {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       providers: [
-        provideAnimationsAsync(),
         provideRouter([{ path: 'photos/:id', component: HeaderComponent }]),
         { provide: FavoritesService, useValue: mockFavoritesService },
       ],
@@ -70,7 +67,6 @@ describe('HeaderComponent', () => {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       providers: [
-        provideAnimationsAsync(),
         provideRouter([{ path: 'photos/:id', component: HeaderComponent }]),
         { provide: FavoritesService, useValue: favoritedMock },
       ],

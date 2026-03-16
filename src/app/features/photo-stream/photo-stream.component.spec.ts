@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, Router } from '@angular/router';
 import { PLATFORM_ID, signal } from '@angular/core';
 import { of, throwError, Subject } from 'rxjs';
@@ -41,7 +40,6 @@ describe('PhotoStreamComponent', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        provideAnimationsAsync(),
         provideRouter([]),
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: API_CONFIG_TOKEN, useValue: API_CONFIG },
