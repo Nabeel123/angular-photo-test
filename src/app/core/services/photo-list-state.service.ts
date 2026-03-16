@@ -1,4 +1,4 @@
-import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { API_CONFIG_TOKEN, Photo, PhotoApiService } from '@app/core';
 
@@ -20,10 +20,7 @@ export class PhotoListStateService {
   readonly hasMore = this._hasMore.asReadonly();
   readonly error = this._error.asReadonly();
 
-  readonly isEmpty = computed(() => this._photos().length === 0 && !this._isLoading());
-  readonly hasError = computed(() => this._error() != null);
-
-  fetchPage(): void {
+  private fetchPage(): void {
     const nextPage = this._page() + 1;
     const limit =
       nextPage === 1 ? this.config.picsum.initialPageLimit : this.config.picsum.pageLimit;

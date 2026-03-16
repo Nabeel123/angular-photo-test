@@ -56,18 +56,6 @@ export class PhotoDetailComponent {
     return p ? this.favoritesService.favoriteIds().has(p.id) : false;
   });
 
-  private readonly _navigateEffect = effect(() => {
-    const id = this.id();
-    if (id === null || (typeof id === 'string' && !id.trim())) {
-      this.photoNav.navigateToStream();
-    }
-  });
-
-  private readonly _resetImageEffect = effect(() => {
-    this.photo();
-    this._imageLoaded.set(false);
-  });
-
   toggleFavorite(): void {
     const p = this.photo();
     if (p) this.favoritesService.toggleFavorite(p);

@@ -37,25 +37,18 @@ describe('FavoritesService', () => {
     expect(service.count()).toBe(1);
   });
 
-  it('should add a favorite', () => {
+  it('should add a favorite via toggle', () => {
     const service = TestBed.inject(FavoritesService);
-    service.addFavorite(mockPhoto);
+    service.toggleFavorite(mockPhoto);
     expect(service.favorites()).toEqual([mockPhoto]);
     expect(service.count()).toBe(1);
     expect(JSON.parse(localStorage.getItem(API_CONFIG.favoritesStorageKey)!)).toEqual([mockPhoto]);
   });
 
-  it('should not duplicate when adding same photo twice', () => {
+  it('should remove when toggling same photo twice', () => {
     const service = TestBed.inject(FavoritesService);
-    service.addFavorite(mockPhoto);
-    service.addFavorite(mockPhoto);
-    expect(service.count()).toBe(1);
-  });
-
-  it('should remove a favorite', () => {
-    const service = TestBed.inject(FavoritesService);
-    service.addFavorite(mockPhoto);
-    service.removeFavorite(mockPhoto.id);
+    service.toggleFavorite(mockPhoto);
+    service.toggleFavorite(mockPhoto);
     expect(service.favorites()).toEqual([]);
     expect(service.count()).toBe(0);
   });
@@ -68,7 +61,7 @@ describe('FavoritesService', () => {
 
   it('should toggle remove', () => {
     const service = TestBed.inject(FavoritesService);
-    service.addFavorite(mockPhoto);
+    service.toggleFavorite(mockPhoto);
     service.toggleFavorite(mockPhoto);
     expect(service.favoriteIds().has(mockPhoto.id)).toBe(false);
   });
@@ -80,8 +73,8 @@ describe('FavoritesService', () => {
 
   it('should maintain insertion order', () => {
     const service = TestBed.inject(FavoritesService);
-    service.addFavorite(mockPhoto);
-    service.addFavorite(mockPhoto2);
+    service.toggleFavorite(mockPhoto);
+    service.toggleFavorite(mockPhoto2);
     expect(service.favorites().map((photo) => photo.id)).toEqual(['1', '2']);
   });
 

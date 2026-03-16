@@ -43,7 +43,15 @@ export class FavoritesService {
   /** Set of favorited photo IDs for O(1) membership checks. */
   readonly favoriteIds = computed(() => new Set(this._photos().map((p) => p.id)));
 
-  addFavorite(photo: Photo): void {
+  toggleFavorite(photo: Photo): void {
+    if (this.favoriteIds().has(photo.id)) {
+      this._removeFavorite(photo.id);
+    } else {
+      this._addFavorite(photo);
+    }
+  }
+
+  private _addFavorite(photo: Photo): void {
     this._photos.update((current) => {
       if (current.some((existing) => existing.id === photo.id)) return current;
       const updated = [...current, photo];
@@ -52,20 +60,12 @@ export class FavoritesService {
     });
   }
 
-  removeFavorite(photoId: string): void {
+  private _removeFavorite(photoId: string): void {
     this._photos.update((current) => {
       const updated = current.filter((p) => p.id !== photoId);
       this.save(updated);
       return updated;
     });
-  }
-
-  toggleFavorite(photo: Photo): void {
-    if (this.favoriteIds().has(photo.id)) {
-      this.removeFavorite(photo.id);
-    } else {
-      this.addFavorite(photo);
-    }
   }
 
   private load(): Photo[] {

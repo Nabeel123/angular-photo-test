@@ -7,7 +7,7 @@ import { Photo } from '../models/photo.model';
 export class PhotoNavigationService {
   private readonly router = inject(Router);
 
-  readonly routes = {
+  private readonly routes = {
     stream: '/',
     favorites: '/favorites',
     photo: (id: string) => `/photos/${id}`,
@@ -15,14 +15,6 @@ export class PhotoNavigationService {
 
   navigateToPhoto(photo: Photo): void {
     void this.router.navigate([this.routes.photo(photo.id)]);
-  }
-
-  navigateToStream(): void {
-    void this.router.navigate([this.routes.stream]);
-  }
-
-  navigateToFavorites(): void {
-    void this.router.navigate([this.routes.favorites]);
   }
 
   /** Back from detail view: to favorites if photo is favorited, else stream. */

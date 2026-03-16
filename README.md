@@ -24,9 +24,6 @@ src/app/
 - **features**: One component per route; lazy-loaded
 - **shared**: Stateless, reusable pieces used across features
 
-## Environment configuration
-
-Copy `.env.production.example` to `.env.production` and adjust. Run `yarn generate-env` to regenerate `api.config.ts` from `.env.production` (runs automatically before `start` and `build`).
 
 ## Development server
 
@@ -104,15 +101,6 @@ docker-compose up --build
 ```
 
 The app will be available at `http://localhost:4000`.
-
-## Performance & Lighthouse Treemap
-
-To analyze bundle size and unused JavaScript with the [Lighthouse Treemap](https://googlechrome.github.io/lighthouse/treemap/?gzip=1#):
-
-1. Run `yarn serve:prod` (builds and serves static files from `dist/piktiv/browser` on port 4200)
-2. Open Chrome DevTools → Lighthouse
-3. Enable **Capture treemap**, run the audit
-4. Export the result as JSON and paste it into the treemap tool
 
 ## Additional Resources
 
