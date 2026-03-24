@@ -5,7 +5,7 @@ A photo library app built with Angular 21. Browse random photos, add them to fav
 ## Architecture
 
 
-The app follow Angular best practices for scalable architecture (aligned with [this article](https://medium.com/@iamtapan/a-guide-to-effective-angular-architecture-best-practices-b08f7104b2a5)):
+The app follow Angular best practices for scalable architecture t (aligned with [this article](https://medium.com/@iamtapan/a-guide-to-effective-angular-architecture-best-practices-b08f7104b2a5)):
 
 Quick overview:
 
