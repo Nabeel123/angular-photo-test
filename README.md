@@ -1,6 +1,6 @@
 # Piktiv
 
-A photo library app built with Angular 21. Browse random photos, add them to favorites, and view details. Favorites persist in localStorage.
+A photo library app built with Angular 21. Browse random photos, add them to favorites, and view details. Favorites persist in localStorage done.
 
 ## Architecture
 
