@@ -20,7 +20,8 @@ app/
 ```
 
 **Conventions**
-- `core/` — imports from `@app/core`
+
+- `core/` — imports from the g `@app/core`
 - `shared/` — imports from `@app/shared`
 - New features → add under `features/`, register in `app.routes.ts`
 - New shared UI → add under `shared/`
